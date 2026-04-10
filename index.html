@@ -1,143 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Task Manager MVP</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Test App</title>
+  <style>
+    body {
+      color: pink;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    button {
+      background-color: pink;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: hotpink;
+    }
+  </style>
 </head>
+<body>
 
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+<h1>Hello, your MVP is working</h1>
 
-<div class="w-full max-w-md bg-white p-6 rounded-lg shadow">
-
-  <!-- LOGIN -->
-  <div id="login-section">
-    <h2 class="text-2xl font-bold mb-4 text-center">Login</h2>
-
-    <input id="email" type="text" placeholder="Enter your name"
-      class="w-full mb-3 p-2 border rounded">
-
-    <button onclick="login()"
-      class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
-      Enter
-    </button>
-  </div>
-
-  <!-- DASHBOARD -->
-  <div id="dashboard" class="hidden">
-    <h2 class="text-2xl font-bold mb-2">Task Dashboard</h2>
-    <p id="welcome" class="mb-4 text-gray-600"></p>
-
-    <!-- ADD TASK -->
-    <div class="flex mb-4">
-      <input id="taskInput" type="text" placeholder="New task..."
-        class="flex-grow p-2 border rounded-l">
-      <button onclick="addTask()"
-        class="bg-green-500 text-white px-4 rounded-r">
-        Add
-      </button>
-    </div>
-
-    <!-- TASK LIST -->
-    <ul id="taskList" class="mb-4"></ul>
-
-    <button onclick="logout()"
-      class="w-full bg-red-500 text-white p-2 rounded">
-      Logout
-    </button>
-  </div>
-
-</div>
+<button onclick="test()">Click Me</button>
 
 <script>
-
-// STATE
-let currentUser = "";
-let tasks = [];
-
-// LOGIN
-function login() {
-  const name = document.getElementById("email").value;
-  if (!name) return alert("Enter your name");
-
-  currentUser = name;
-  localStorage.setItem("user", name);
-
-  loadTasks();
-
-  document.getElementById("login-section").classList.add("hidden");
-  document.getElementById("dashboard").classList.remove("hidden");
-  document.getElementById("welcome").textContent = "Welcome, " + name;
+function test() {
+  alert("JavaScript is working!");
 }
-
-// LOGOUT
-function logout() {
-  localStorage.removeItem("user");
-  location.reload();
-}
-
-// LOAD TASKS
-function loadTasks() {
-  const saved = localStorage.getItem("tasks_" + currentUser);
-  tasks = saved ? JSON.parse(saved) : [];
-  renderTasks();
-}
-
-// SAVE TASKS
-function saveTasks() {
-  localStorage.setItem("tasks_" + currentUser, JSON.stringify(tasks));
-}
-
-// ADD TASK
-function addTask() {
-  const input = document.getElementById("taskInput");
-  if (!input.value) return;
-
-  tasks.push(input.value);
-  input.value = "";
-
-  saveTasks();
-  renderTasks();
-}
-
-// DELETE TASK
-function deleteTask(index) {
-  tasks.splice(index, 1);
-  saveTasks();
-  renderTasks();
-}
-
-// RENDER TASKS
-function renderTasks() {
-  const list = document.getElementById("taskList");
-  list.innerHTML = "";
-
-  tasks.forEach((task, index) => {
-    const li = document.createElement("li");
-    li.className = "flex justify-between items-center mb-2 bg-gray-100 p-2 rounded";
-
-    li.innerHTML = `
-      <span>${task}</span>
-      <button onclick="deleteTask(${index})" class="text-red-500">X</button>
-    `;
-
-    list.appendChild(li);
-  });
-}
-
-// AUTO LOGIN IF SAVED
-window.onload = () => {
-  const savedUser = localStorage.getItem("user");
-  if (savedUser) {
-    currentUser = savedUser;
-    document.getElementById("login-section").classList.add("hidden");
-    document.getElementById("dashboard").classList.remove("hidden");
-    document.getElementById("welcome").textContent = "Welcome, " + savedUser;
-
-    loadTasks();
-  }
-};
-
 </script>
 
 </body>
