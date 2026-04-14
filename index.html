@@ -25,7 +25,6 @@ h1 {
   margin-top: 10px;
 }
 
-/* BUTTON ROW */
 .nav-buttons {
   display: flex;
   justify-content: space-between;
@@ -50,7 +49,6 @@ button:hover {
   background-color: #b3003c;
 }
 
-/* INPUTS */
 input, select {
   padding: 10px;
   border-radius: 8px;
@@ -58,7 +56,6 @@ input, select {
   color: #ff4d88;
 }
 
-/* SEATS */
 .seats {
   display: grid;
   grid-template-columns: repeat(4, 60px);
@@ -83,7 +80,6 @@ input, select {
   cursor: not-allowed;
 }
 
-/* IMAGES */
 .cute-img {
   width: 80px;
   margin: 10px;
@@ -111,6 +107,7 @@ input, select {
 <!-- STEP 2 -->
 <div id="step2" class="hidden">
   <h2>Select Tickets </h2>
+  <p>Adult: $10 | Child: $6</p>
   Adults: <input type="number" id="adults" min="0" value="0"><br>
   Children: <input type="number" id="children" min="0" value="0"><br>
 
@@ -123,6 +120,7 @@ input, select {
 <!-- STEP 3 -->
 <div id="step3" class="hidden">
   <h2>Pick Your Pizza </h2>
+  <p>All pies: $8</p>
   <select id="pie">
     <option>Cheese</option>
     <option>Pepperoni</option>
@@ -165,6 +163,11 @@ input, select {
 <script>
 let selectedSeat = null;
 
+// PRICES
+const ADULT_PRICE = 10;
+const CHILD_PRICE = 6;
+const PIE_PRICE = 8;
+
 // LOAD OCCUPIED SEATS
 let occupiedSeats = JSON.parse(localStorage.getItem("occupiedSeats")) || [];
 
@@ -203,8 +206,8 @@ function prevStep(step) {
 // CONFIRM BOOKING
 function confirmBooking() {
   const name = document.getElementById("name").value;
-  const adults = document.getElementById("adults").value;
-  const children = document.getElementById("children").value;
+  const adults = parseInt(document.getElementById("adults").value) || 0;
+  const children = parseInt(document.getElementById("children").value) || 0;
   const pie = document.getElementById("pie").value;
 
   if (!name || selectedSeat === null) {
@@ -212,16 +215,23 @@ function confirmBooking() {
     return;
   }
 
+  // CALCULATE TOTAL
+  const total =
+    (adults * ADULT_PRICE) +
+    (children * CHILD_PRICE) +
+    PIE_PRICE;
+
   // SAVE OCCUPIED SEAT
   occupiedSeats.push(selectedSeat);
   localStorage.setItem("occupiedSeats", JSON.stringify(occupiedSeats));
 
   document.getElementById("summary").innerHTML =
     `Name: ${name}<br>
-     Adults: ${adults}<br>
-     Children: ${children}<br>
-     Pie: ${pie}<br>
-     Seat: ${selectedSeat}`;
+     Adults: ${adults} ($${adults * ADULT_PRICE})<br>
+     Children: ${children} ($${children * CHILD_PRICE})<br>
+     Pie: ${pie} ($${PIE_PRICE})<br>
+     Seat: ${selectedSeat}<br><br>
+     <strong>Total: $${total}</strong>`;
 
   nextStep(5);
 }
