@@ -1,178 +1,240 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Don Bosco Theater Booking</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to right, #1e3c72, #2a5298);
-      color: pink; /* CHANGED TO PINK */
-      text-align: center;
-      margin: 0;
-      padding: 0;
-    }
+<meta charset="UTF-8">
+<title>Don Bosco Theater Booking</title>
 
-    .container {
-      padding: 20px;
-    }
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to right, #ff9a9e, #fad0c4);
+  color: #ff4d88;
+  text-align: center;
+  margin: 0;
+}
 
-    .hidden {
-      display: none;
-    }
+.container {
+  padding: 20px;
+}
 
-    button {
-      padding: 10px 20px;
-      margin: 10px;
-      border: none;
-      border-radius: 8px;
-      background-color: #ff9800;
-      color: pink; /* BUTTON TEXT PINK */
-      font-size: 16px;
-      cursor: pointer;
-    }
+.hidden {
+  display: none;
+}
 
-    button:hover {
-      background-color: #e68900;
-    }
+h1 {
+  margin-top: 10px;
+}
 
-    input, select {
-      padding: 10px;
-      margin: 10px;
-      border-radius: 5px;
-      border: none;
-      color: pink; /* INPUT TEXT PINK */
-    }
+/* BUTTON ROW */
+.nav-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 40px;
+}
 
-    .seats button {
-      width: 50px;
-      height: 50px;
-      margin: 5px;
-      background-color: green;
-      color: pink; /* SEAT NUMBERS PINK */
-    }
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  background-color: #ff4d88;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
 
-    .seats button.selected {
-      background-color: red;
-    }
+button:hover {
+  background-color: #e6005c;
+}
 
-    .exit {
-      background-color: crimson;
-    }
-  </style>
+.exit {
+  background-color: #b3003c;
+}
+
+/* INPUTS */
+input, select {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ff4d88;
+  color: #ff4d88;
+}
+
+/* SEATS */
+.seats {
+  display: grid;
+  grid-template-columns: repeat(4, 60px);
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.seats button {
+  width: 60px;
+  height: 60px;
+  background-color: #ffb6c1;
+  color: #fff;
+}
+
+.seats button.selected {
+  background-color: #ff4d88;
+}
+
+.seats button.occupied {
+  background-color: #555;
+  cursor: not-allowed;
+}
+
+/* IMAGES */
+.cute-img {
+  width: 80px;
+  margin: 10px;
+}
+</style>
 </head>
+
 <body>
 
 <div class="container">
 
-  <h1> Don Bosco Theatre</h1>
+<h1> Don Bosco Theatre</h1>
+<img class="cute-img" src="https://cdn-icons-png.flaticon.com/512/869/869636.png">
 
-  <!-- STEP 1: NAME -->
-  <div id="step1">
-    <h2>Enter Your Name</h2>
-    <input type="text" id="name" placeholder="Your Name">
-    <br>
-    <button onclick="nextStep(2)">Next</button>
+<!-- STEP 1 -->
+<div id="step1">
+  <h2>Enter Your Name</h2>
+  <input type="text" id="name" placeholder="Your Name">
+  <div class="nav-buttons">
+    <div></div>
+    <button onclick="nextStep(2)">Next ➡</button>
   </div>
+</div>
 
-  <!-- STEP 2: TICKETS -->
-  <div id="step2" class="hidden">
-    <h2>Select Tickets</h2>
-    Adults: <input type="number" id="adults" min="0" value="0"><br>
-    Children: <input type="number" id="children" min="0" value="0"><br>
-    <button onclick="nextStep(3)">Next</button>
-    <button onclick="prevStep(1)">Back</button>
+<!-- STEP 2 -->
+<div id="step2" class="hidden">
+  <h2>Select Tickets </h2>
+  Adults: <input type="number" id="adults" min="0" value="0"><br>
+  Children: <input type="number" id="children" min="0" value="0"><br>
+
+  <div class="nav-buttons">
+    <button onclick="prevStep(1)">⬅ Back</button>
+    <button onclick="nextStep(3)">Next ➡</button>
   </div>
+</div>
 
-  <!-- STEP 3: PIE SELECTION -->
-  <div id="step3" class="hidden">
-    <h2>Select Your Pie </h2>
-    <select id="pie">
-      <option>Cheese</option>
-      <option>Pepperoni</option>
-      <option>Veggie</option>
-      <option>Meat Lovers</option>
-    </select>
-    <br>
-    <button onclick="nextStep(4)">Next</button>
-    <button onclick="prevStep(2)">Back</button>
+<!-- STEP 3 -->
+<div id="step3" class="hidden">
+  <h2>Pick Your Pizza </h2>
+  <select id="pie">
+    <option>Cheese</option>
+    <option>Pepperoni</option>
+    <option>Veggie</option>
+    <option>Meat Lovers</option>
+  </select>
+
+  <div class="nav-buttons">
+    <button onclick="prevStep(2)">⬅ Back</button>
+    <button onclick="nextStep(4)">Next ➡</button>
   </div>
+</div>
 
-  <!-- STEP 4: SEAT SELECTION -->
-  <div id="step4" class="hidden">
-    <h2>Select Your Seat</h2>
-    <div class="seats" id="seats"></div>
-    <button onclick="confirmBooking()">Confirm</button>
-    <button onclick="prevStep(3)">Back</button>
+<!-- STEP 4 -->
+<div id="step4" class="hidden">
+  <h2>Select Your Seat </h2>
+  <img class="cute-img" src="https://cdn-icons-png.flaticon.com/512/1046/1046784.png">
+  <div class="seats" id="seats"></div>
+
+  <div class="nav-buttons">
+    <button onclick="prevStep(3)">⬅ Back</button>
+    <button onclick="confirmBooking()">Confirm </button>
   </div>
+</div>
 
-  <!-- STEP 5: CONFIRMATION -->
-  <div id="step5" class="hidden">
-    <h2> Booking Confirmed!</h2>
-    <p id="summary"></p>
-    <button onclick="restart()">Book Again</button>
-  </div>
+<!-- STEP 5 -->
+<div id="step5" class="hidden">
+  <h2> Booking Confirmed!</h2>
+  <img class="cute-img" src="https://cdn-icons-png.flaticon.com/512/2583/2583344.png">
+  <p id="summary"></p>
 
-  <!-- EXIT BUTTON -->
-  <button class="exit" onclick="exitApp()">Exit</button>
+  <button onclick="restart()">Book Again</button>
+</div>
+
+<br>
+<button class="exit" onclick="exitApp()">Exit</button>
 
 </div>
 
 <script>
-  let selectedSeat = null;
+let selectedSeat = null;
 
-  // CREATE SEATS
-  const seatsDiv = document.getElementById("seats");
-  for (let i = 1; i <= 12; i++) {
-    let btn = document.createElement("button");
-    btn.innerText = i;
+// LOAD OCCUPIED SEATS
+let occupiedSeats = JSON.parse(localStorage.getItem("occupiedSeats")) || [];
 
-    btn.onclick = function () {
-      document.querySelectorAll(".seats button").forEach(b => b.classList.remove("selected"));
-      btn.classList.add("selected");
-      selectedSeat = i;
-    };
+// CREATE SEATS
+const seatsDiv = document.getElementById("seats");
 
-    seatsDiv.appendChild(btn);
+for (let i = 1; i <= 12; i++) {
+  let btn = document.createElement("button");
+  btn.innerText = i;
+
+  if (occupiedSeats.includes(i)) {
+    btn.classList.add("occupied");
   }
 
-  function nextStep(step) {
-    document.querySelectorAll(".container > div").forEach(div => div.classList.add("hidden"));
-    document.getElementById("step" + step).classList.remove("hidden");
+  btn.onclick = function () {
+    if (btn.classList.contains("occupied")) return;
+
+    document.querySelectorAll(".seats button").forEach(b => b.classList.remove("selected"));
+    btn.classList.add("selected");
+    selectedSeat = i;
+  };
+
+  seatsDiv.appendChild(btn);
+}
+
+// NAVIGATION
+function nextStep(step) {
+  document.querySelectorAll(".container > div").forEach(div => div.classList.add("hidden"));
+  document.getElementById("step" + step).classList.remove("hidden");
+}
+
+function prevStep(step) {
+  nextStep(step);
+}
+
+// CONFIRM BOOKING
+function confirmBooking() {
+  const name = document.getElementById("name").value;
+  const adults = document.getElementById("adults").value;
+  const children = document.getElementById("children").value;
+  const pie = document.getElementById("pie").value;
+
+  if (!name || selectedSeat === null) {
+    alert("Please complete all steps!");
+    return;
   }
 
-  function prevStep(step) {
-    nextStep(step);
-  }
+  // SAVE OCCUPIED SEAT
+  occupiedSeats.push(selectedSeat);
+  localStorage.setItem("occupiedSeats", JSON.stringify(occupiedSeats));
 
-  function confirmBooking() {
-    const name = document.getElementById("name").value;
-    const adults = document.getElementById("adults").value;
-    const children = document.getElementById("children").value;
-    const pie = document.getElementById("pie").value;
+  document.getElementById("summary").innerHTML =
+    `Name: ${name}<br>
+     Adults: ${adults}<br>
+     Children: ${children}<br>
+     Pie: ${pie}<br>
+     Seat: ${selectedSeat}`;
 
-    if (!name || selectedSeat === null) {
-      alert("Please complete all steps!");
-      return;
-    }
+  nextStep(5);
+}
 
-    document.getElementById("summary").innerHTML =
-      `Name: ${name}<br>
-       Adults: ${adults}<br>
-       Children: ${children}<br>
-       Pie: ${pie}<br>
-       Seat: ${selectedSeat}`;
+// RESET
+function restart() {
+  location.reload();
+}
 
-    nextStep(5);
-  }
-
-  function restart() {
-    location.reload();
-  }
-
-  function exitApp() {
-    document.body.innerHTML = "<h1> Thank you! See you next time.</h1>";
-  }
+// EXIT
+function exitApp() {
+  document.body.innerHTML = "<h1> Thank you! See you next time.</h1>";
+}
 </script>
 
 </body>
