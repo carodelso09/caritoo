@@ -1,38 +1,178 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Test App</title>
+  <meta charset="UTF-8">
+  <title>Don Bosco Theater Booking</title>
   <style>
     body {
-      color: pink;
       font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #1e3c72, #2a5298);
+      color: pink; /* CHANGED TO PINK */
       text-align: center;
-      margin-top: 50px;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      padding: 20px;
+    }
+
+    .hidden {
+      display: none;
     }
 
     button {
-      background-color: pink;
-      color: white;
-      border: none;
       padding: 10px 20px;
+      margin: 10px;
+      border: none;
+      border-radius: 8px;
+      background-color: #ff9800;
+      color: pink; /* BUTTON TEXT PINK */
+      font-size: 16px;
       cursor: pointer;
     }
 
     button:hover {
-      background-color: hotpink;
+      background-color: #e68900;
+    }
+
+    input, select {
+      padding: 10px;
+      margin: 10px;
+      border-radius: 5px;
+      border: none;
+      color: pink; /* INPUT TEXT PINK */
+    }
+
+    .seats button {
+      width: 50px;
+      height: 50px;
+      margin: 5px;
+      background-color: green;
+      color: pink; /* SEAT NUMBERS PINK */
+    }
+
+    .seats button.selected {
+      background-color: red;
+    }
+
+    .exit {
+      background-color: crimson;
     }
   </style>
 </head>
 <body>
 
-<h1>Hello, your MVP is working</h1>
+<div class="container">
 
-<button onclick="test()">Click Me</button>
+  <h1> Don Bosco Theatre</h1>
+
+  <!-- STEP 1: NAME -->
+  <div id="step1">
+    <h2>Enter Your Name</h2>
+    <input type="text" id="name" placeholder="Your Name">
+    <br>
+    <button onclick="nextStep(2)">Next</button>
+  </div>
+
+  <!-- STEP 2: TICKETS -->
+  <div id="step2" class="hidden">
+    <h2>Select Tickets</h2>
+    Adults: <input type="number" id="adults" min="0" value="0"><br>
+    Children: <input type="number" id="children" min="0" value="0"><br>
+    <button onclick="nextStep(3)">Next</button>
+    <button onclick="prevStep(1)">Back</button>
+  </div>
+
+  <!-- STEP 3: PIE SELECTION -->
+  <div id="step3" class="hidden">
+    <h2>Select Your Pie </h2>
+    <select id="pie">
+      <option>Cheese</option>
+      <option>Pepperoni</option>
+      <option>Veggie</option>
+      <option>Meat Lovers</option>
+    </select>
+    <br>
+    <button onclick="nextStep(4)">Next</button>
+    <button onclick="prevStep(2)">Back</button>
+  </div>
+
+  <!-- STEP 4: SEAT SELECTION -->
+  <div id="step4" class="hidden">
+    <h2>Select Your Seat</h2>
+    <div class="seats" id="seats"></div>
+    <button onclick="confirmBooking()">Confirm</button>
+    <button onclick="prevStep(3)">Back</button>
+  </div>
+
+  <!-- STEP 5: CONFIRMATION -->
+  <div id="step5" class="hidden">
+    <h2> Booking Confirmed!</h2>
+    <p id="summary"></p>
+    <button onclick="restart()">Book Again</button>
+  </div>
+
+  <!-- EXIT BUTTON -->
+  <button class="exit" onclick="exitApp()">Exit</button>
+
+</div>
 
 <script>
-function test() {
-  alert("JavaScript is working!");
-}
+  let selectedSeat = null;
+
+  // CREATE SEATS
+  const seatsDiv = document.getElementById("seats");
+  for (let i = 1; i <= 12; i++) {
+    let btn = document.createElement("button");
+    btn.innerText = i;
+
+    btn.onclick = function () {
+      document.querySelectorAll(".seats button").forEach(b => b.classList.remove("selected"));
+      btn.classList.add("selected");
+      selectedSeat = i;
+    };
+
+    seatsDiv.appendChild(btn);
+  }
+
+  function nextStep(step) {
+    document.querySelectorAll(".container > div").forEach(div => div.classList.add("hidden"));
+    document.getElementById("step" + step).classList.remove("hidden");
+  }
+
+  function prevStep(step) {
+    nextStep(step);
+  }
+
+  function confirmBooking() {
+    const name = document.getElementById("name").value;
+    const adults = document.getElementById("adults").value;
+    const children = document.getElementById("children").value;
+    const pie = document.getElementById("pie").value;
+
+    if (!name || selectedSeat === null) {
+      alert("Please complete all steps!");
+      return;
+    }
+
+    document.getElementById("summary").innerHTML =
+      `Name: ${name}<br>
+       Adults: ${adults}<br>
+       Children: ${children}<br>
+       Pie: ${pie}<br>
+       Seat: ${selectedSeat}`;
+
+    nextStep(5);
+  }
+
+  function restart() {
+    location.reload();
+  }
+
+  function exitApp() {
+    document.body.innerHTML = "<h1> Thank you! See you next time.</h1>";
+  }
 </script>
 
 </body>
