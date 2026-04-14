@@ -7,8 +7,8 @@
 <style>
 body {
   font-family: Arial, sans-serif;
-  background: linear-gradient(to right, #ff9a9e, #fad0c4);
-  color: #ff4d88;
+  background: linear-gradient(to right, #ffc1cc, #ffe4e9);
+  color: #d63384;
   text-align: center;
   margin: 0;
 }
@@ -22,9 +22,10 @@ body {
 }
 
 h1 {
-  margin-top: 10px;
+  color: #c2185b;
 }
 
+/* NAV BUTTONS */
 .nav-buttons {
   display: flex;
   justify-content: space-between;
@@ -35,27 +36,28 @@ button {
   padding: 10px 20px;
   border: none;
   border-radius: 10px;
-  background-color: #ff4d88;
+  background-color: #ff69b4;
   color: white;
-  font-size: 16px;
   cursor: pointer;
 }
 
 button:hover {
-  background-color: #e6005c;
+  background-color: #d63384;
 }
 
 .exit {
-  background-color: #b3003c;
+  background-color: #6c757d;
 }
 
+/* INPUTS */
 input, select {
   padding: 10px;
   border-radius: 8px;
-  border: 1px solid #ff4d88;
-  color: #ff4d88;
+  border: 1px solid #ff69b4;
+  color: #d63384;
 }
 
+/* SEATS */
 .seats {
   display: grid;
   grid-template-columns: repeat(4, 60px);
@@ -68,20 +70,21 @@ input, select {
   width: 60px;
   height: 60px;
   background-color: #ffb6c1;
-  color: #fff;
+  color: white;
 }
 
 .seats button.selected {
-  background-color: #ff4d88;
+  background-color: #ff1493;
 }
 
 .seats button.occupied {
-  background-color: #555;
+  background-color: #adb5bd;
   cursor: not-allowed;
 }
 
-.cute-img {
-  width: 80px;
+/* IMAGES */
+.cute {
+  width: 70px;
   margin: 10px;
 }
 </style>
@@ -92,12 +95,13 @@ input, select {
 <div class="container">
 
 <h1> Don Bosco Theatre</h1>
-<img class="cute-img" src="https://cdn-icons-png.flaticon.com/512/869/869636.png">
+<img class="cute" src="https://cdn-icons-png.flaticon.com/512/869/869636.png">
 
 <!-- STEP 1 -->
 <div id="step1">
   <h2>Enter Your Name</h2>
   <input type="text" id="name" placeholder="Your Name">
+
   <div class="nav-buttons">
     <div></div>
     <button onclick="nextStep(2)">Next ➡</button>
@@ -106,8 +110,9 @@ input, select {
 
 <!-- STEP 2 -->
 <div id="step2" class="hidden">
-  <h2>Select Tickets </h2>
+  <h2>Tickets </h2>
   <p>Adult: $10 | Child: $6</p>
+
   Adults: <input type="number" id="adults" min="0" value="0"><br>
   Children: <input type="number" id="children" min="0" value="0"><br>
 
@@ -119,13 +124,14 @@ input, select {
 
 <!-- STEP 3 -->
 <div id="step3" class="hidden">
-  <h2>Pick Your Pizza </h2>
-  <p>All pizzas: $8</p>
+  <h2>Choose Your Pie </h2>
+  <p>All pies: $8</p>
+
   <select id="pie">
-    <option>Cheese</option>
-    <option>Pepperoni</option>
-    <option>Veggie</option>
-    <option>Meat Lovers</option>
+    <option>Apple</option>
+    <option>Cinnamon</option>
+    <option>Blueberry</option>
+    <option>Lemon</option>
   </select>
 
   <div class="nav-buttons">
@@ -136,8 +142,9 @@ input, select {
 
 <!-- STEP 4 -->
 <div id="step4" class="hidden">
-  <h2>Select Your Seat </h2>
-  <img class="cute-img" src="https://cdn-icons-png.flaticon.com/512/1046/1046784.png">
+  <h2>Select Seat </h2>
+  <img class="cute" src="https://cdn-icons-png.flaticon.com/512/1046/1046784.png">
+
   <div class="seats" id="seats"></div>
 
   <div class="nav-buttons">
@@ -148,8 +155,9 @@ input, select {
 
 <!-- STEP 5 -->
 <div id="step5" class="hidden">
-  <h2> Booking Confirmed!</h2>
-  <img class="cute-img" src="https://cdn-icons-png.flaticon.com/512/2583/2583344.png">
+  <h2> Booking Confirmed</h2>
+  <img class="cute" src="https://cdn-icons-png.flaticon.com/512/2583/2583344.png">
+
   <p id="summary"></p>
 
   <button onclick="restart()">Book Again</button>
@@ -164,11 +172,11 @@ input, select {
 let selectedSeat = null;
 
 // PRICES
-const ADULT_PRICE = 10;
-const CHILD_PRICE = 6;
-const PIE_PRICE = 8;
+const ADULT = 10;
+const CHILD = 6;
+const PIE = 8;
 
-// LOAD OCCUPIED SEATS
+// LOAD SAVED SEATS
 let occupiedSeats = JSON.parse(localStorage.getItem("occupiedSeats")) || [];
 
 // CREATE SEATS
@@ -203,7 +211,7 @@ function prevStep(step) {
   nextStep(step);
 }
 
-// CONFIRM BOOKING
+// CONFIRM
 function confirmBooking() {
   const name = document.getElementById("name").value;
   const adults = parseInt(document.getElementById("adults").value) || 0;
@@ -215,21 +223,16 @@ function confirmBooking() {
     return;
   }
 
-  // CALCULATE TOTAL
-  const total =
-    (adults * ADULT_PRICE) +
-    (children * CHILD_PRICE) +
-    PIE_PRICE;
+  const total = (adults * ADULT) + (children * CHILD) + PIE;
 
-  // SAVE OCCUPIED SEAT
   occupiedSeats.push(selectedSeat);
   localStorage.setItem("occupiedSeats", JSON.stringify(occupiedSeats));
 
   document.getElementById("summary").innerHTML =
     `Name: ${name}<br>
-     Adults: ${adults} ($${adults * ADULT_PRICE})<br>
-     Children: ${children} ($${children * CHILD_PRICE})<br>
-     Pie: ${pie} ($${PIE_PRICE})<br>
+     Adults: ${adults} ($${adults * ADULT})<br>
+     Children: ${children} ($${children * CHILD})<br>
+     Pie: ${pie} ($${PIE})<br>
      Seat: ${selectedSeat}<br><br>
      <strong>Total: $${total}</strong>`;
 
